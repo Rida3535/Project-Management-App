@@ -52,6 +52,3 @@ A simple web app to **add, view, and delete projects** using React (frontend) an
 
 This project is open-source under the **MIT License**.  
 
----
-
-Let me know if you need further simplifications! 😊
