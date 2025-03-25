@@ -1,0 +1,258 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #1e1e2f;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Main Container */
+.App {
+  text-align: center;
+  width: 90%;
+  max-width: 600px;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Header */
+.App-header {
+  background: #2a2b3d;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s;
+}
+
+.App-header:hover {
+  transform: scale(1.02);
+}
+
+/* Title with Animated Icon */
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+h1 {
+  font-size: 2.2rem;
+  color: #61dafb;
+  text-shadow: 0px 0px 10px rgba(97, 218, 251, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap; /* Prevents wrapping */
+}
+
+h1 .icon {
+  box-shadow: none;
+  text-shadow: none;
+}
+
+/* Project Count */
+h2 {
+  font-size: 1.3rem;
+  color: #d1d1e9;
+}
+
+.count {
+  color: #61dafb;
+  font-weight: bold;
+}
+
+/* Input Container */
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Input Styling */
+.project-input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  width: 60%;
+  text-align: center;
+  background: #3a3b4f;
+  color: white;
+  transition: background 0.3s ease-in-out; /* Fixed transition */
+  animation: inputFadeIn 0.6s ease-in-out;
+}
+
+.project-input:focus {
+  background: #4b4c64;
+  box-shadow: 0px 0px 10px rgba(97, 218, 251, 0.6);
+}
+
+/* Animated Button */
+.add-btn, .delete-btn, .refresh-btn {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Button Styles */
+.add-btn {
+  background: #61dafb;
+  color: white;
+  box-shadow: 0px 4px 10px rgba(97, 218, 251, 0.5);
+}
+
+.add-btn:hover {
+  background: #4fa3d1;
+  box-shadow: 0px 6px 15px rgba(97, 218, 251, 0.7);
+}
+
+.delete-btn {
+  background: #ff6b6b;
+  color: white;
+  box-shadow: 0px 4px 10px rgba(255, 107, 107, 0.5);
+}
+
+.delete-btn:hover {
+  background: #d14f4f;
+  box-shadow: 0px 6px 15px rgba(255, 107, 107, 0.7);
+}
+
+.refresh-btn {
+  background: #ffaa00;
+  color: white;
+  box-shadow: 0px 4px 10px rgba(255, 170, 0, 0.5);
+}
+
+.refresh-btn:hover {
+  background: #e69500;
+  box-shadow: 0px 6px 15px rgba(255, 170, 0, 0.7);
+}
+
+/* Press Effect Animation */
+@keyframes pressEffect {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Apply Animation on Button Click */
+.add-btn:active,
+.delete-btn:active,
+.refresh-btn:active {
+  animation: pressEffect 0.2s ease-in-out;
+}
+
+/* Button Container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Project List */
+.project-list {
+  margin-top: 20px;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Scrollbar */
+.project-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.project-list::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+}
+
+.project-list::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* Project Card */
+.project-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #3a3b4f;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: 0.3s ease-in-out;
+  transform: translateY(10px);
+  opacity: 0;
+  animation: slideUp 0.5s ease-in-out forwards;
+}
+
+.error {
+  color: red;
+}
+
+/* Project Card Animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Input Field Fade-in Animation */
+@keyframes inputFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
