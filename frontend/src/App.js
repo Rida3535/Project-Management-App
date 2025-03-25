@@ -36,28 +36,29 @@ function App() {
             setError("Project name must be at least 3 characters");
             return;
         }
-
+    
         try {
             const response = await fetch(`${API_URL}/api/projects`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: newProject.trim() }),
             });
-
+    
             const data = await response.json();
-            console.log("Response from server:", data);  
-
-            if (data.status === "error") {
-                setError(data.message);
-            } else {
+            console.log("Server Response:", data);  // ✅ Debugging log
+    
+            if (response.ok) {  // ✅ Check if request was successful
                 setNewProject("");  
                 setError("");  
-                await fetchProjects();
+                fetchProjects();  // Fetch updated projects
+            } else {
+                setError(data.message || "Failed to add project");
             }
         } catch (error) {
             console.error("Failed to add project:", error);
+            setError("Could not connect to the server");
         }
-    };
+    };    
 
     const deleteProject = async (id) => {
         try {
@@ -76,8 +77,7 @@ function App() {
 
     const refreshProjects = async () => {
         await fetchProjects();
-        setError("");   // Removed `await` (not needed)
-        setNewProject("");   // Removed `await` (not needed)
+        setError("");           setNewProject("");   
         setRefreshMessage(true); // Show refresh message
 
         // Hide the message after 3 seconds
