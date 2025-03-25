@@ -1,7 +1,3 @@
-Here’s a simple **README.md** file for your project:  
-
----
-
 # 📌 Project Management App  
 
 A simple web app to **add, view, and delete projects** using React (frontend) and Express.js (backend).  
