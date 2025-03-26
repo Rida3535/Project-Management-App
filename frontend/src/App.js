@@ -12,7 +12,7 @@ function App() {
     // Fetch projects from backend
     const fetchProjects = async () => {
         try {
-            const response = await fetch(`${API_URL}/api/projects`);
+            const response = await fetch(`${API_URL}/projects`);
             const data = await response.json();
             setProjects(data.projects);
         } catch (error) {
@@ -32,7 +32,7 @@ function App() {
         }
 
         try {
-            const response = await fetch(`${API_URL}/api/projects`, {
+            const response = await fetch(`${API_URL}/projects`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: newProject.trim() }),
@@ -56,7 +56,7 @@ function App() {
 
     const deleteProject = async (id) => {
         try {
-            const response = await fetch(`${API_URL}/api/projects/${id}`, {
+            const response = await fetch(`${API_URL}/projects/${id}`, {
                 method: "DELETE",
             });
 
