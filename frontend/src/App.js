@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 
-const API_URL = "https://project-manager-8350jwfsd-rida-naseers-projects.vercel.app";
+const API_URL = "project-management-app-production-ef9d.up.railway.app";
 
 function App() {
     const [projects, setProjects] = useState([]);
