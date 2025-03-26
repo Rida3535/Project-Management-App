@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 
-const API_URL = "http://localhost:5000"; // Backend URL
+const API_URL = "https://project-manager-eight-delta.vercel.app";
 
 function App() {
     const [projects, setProjects] = useState([]);
@@ -20,7 +20,6 @@ function App() {
                 setProjects([]);
                 return;
             }
-
             setProjects(data.projects);
         } catch (error) {
             console.error("Error fetching projects:", error);
@@ -36,20 +35,20 @@ function App() {
             setError("Project name must be at least 3 characters");
             return;
         }
-    
+
         try {
             const response = await fetch(`${API_URL}/api/projects`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: newProject.trim() }),
             });
-    
+
             const data = await response.json();
             console.log("Server Response:", data);  // ✅ Debugging log
-    
+
             if (response.ok) {  // ✅ Check if request was successful
-                setNewProject("");  
-                setError("");  
+                setNewProject("");
+                setError("");
                 fetchProjects();  // Fetch updated projects
             } else {
                 setError(data.message || "Failed to add project");
@@ -58,7 +57,7 @@ function App() {
             console.error("Failed to add project:", error);
             setError("Could not connect to the server");
         }
-    };    
+    };
 
     const deleteProject = async (id) => {
         try {
@@ -77,7 +76,7 @@ function App() {
 
     const refreshProjects = async () => {
         await fetchProjects();
-        setError("");           setNewProject("");   
+        setError(""); setNewProject("");
         setRefreshMessage(true); // Show refresh message
 
         // Hide the message after 3 seconds
@@ -115,7 +114,7 @@ function App() {
 
                 {/* Buttons (Add Project & Refresh Projects) */}
                 <div className="button-container">
-                    <button onClick={addProject} className="add-btn">Add Project</button> 
+                    <button onClick={addProject} className="add-btn">Add Project</button>
                     <button onClick={refreshProjects} className="refresh-btn">Refresh Projects</button>
                 </div>
 
