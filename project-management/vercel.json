@@ -1,26 +1,25 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "server.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "rewrites": [
-      {
-        "source": "/api/projects",
-        "destination": "https://project-manager-eight-delta.vercel.app/api/projects"
-      }
-    ],
-    "headers": [
-      {
-        "source": "/api/(.*)",
-        "headers": [
-          { "key": "Access-Control-Allow-Origin", "value": "*" },
-          { "key": "Access-Control-Allow-Methods", "value": "GET, POST, DELETE, OPTIONS" },
-          { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
-        ]
-      }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://project-manager-8350jwfsd-rida-naseers-projects.vercel.app/api/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, DELETE, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+      ]
+    }
+  ]
+}

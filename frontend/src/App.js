@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 
-const API_URL = "https://project-manager-eight-delta.vercel.app";
+const API_URL = "https://project-manager-8350jwfsd-rida-naseers-projects.vercel.app";
 
 function App() {
     const [projects, setProjects] = useState([]);
@@ -14,17 +14,12 @@ function App() {
         try {
             const response = await fetch(`${API_URL}/api/projects`);
             const data = await response.json();
-
-            if (!Array.isArray(data.projects)) {
-                console.error("Invalid response format:", data);
-                setProjects([]);
-                return;
-            }
             setProjects(data.projects);
         } catch (error) {
             console.error("Error fetching projects:", error);
         }
     };
+    
 
     useEffect(() => {
         fetchProjects();
