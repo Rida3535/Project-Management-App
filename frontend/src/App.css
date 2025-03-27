@@ -113,10 +113,17 @@ h2 {
     font-size: 0.9rem;
     padding: 10px;
   }
+
+  .App {
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+  }
 }
 
 /* Buttons */
-.add-btn, .refresh-btn {
+.add-btn,
+.refresh-btn {
   padding: 12px 18px;
   border: none;
   border-radius: 8px;
@@ -156,14 +163,17 @@ h2 {
 
 /* Responsive: Adjust button sizes on mobile */
 @media (max-width: 480px) {
-  .add-btn, .refresh-btn {
+
+  .add-btn,
+  .refresh-btn {
     font-size: 0.9rem;
     padding: 10px 15px;
     width: 100%;
   }
+
   .delete-btn {
     margin-left: 0;
-    width: 50%;
+    min-width: 50px;
   }
 }
 
