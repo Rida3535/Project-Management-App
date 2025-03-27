@@ -116,7 +116,7 @@ h2 {
 }
 
 /* Buttons */
-.add-btn, .delete-btn, .refresh-btn {
+.add-btn, .refresh-btn {
   padding: 12px 18px;
   border: none;
   border-radius: 8px;
@@ -133,23 +133,43 @@ h2 {
   min-width: 120px;
 }
 
+/* Delete Button Specific Style */
+.delete-btn {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 50px;
+  background: #ff6b6b;
+  color: white;
+  margin-left: auto;
+}
+
 /* Responsive: Adjust button sizes on mobile */
 @media (max-width: 480px) {
-  .add-btn, .delete-btn, .refresh-btn {
+  .add-btn, .refresh-btn {
     font-size: 0.9rem;
     padding: 10px 15px;
     width: 100%;
+  }
+  .delete-btn {
+    margin-left: 0;
+    width: 50%;
   }
 }
 
 /* Button Styles */
 .add-btn {
   background: #61dafb;
-  color: white;
-}
-
-.delete-btn {
-  background: #ff6b6b;
   color: white;
 }
 
