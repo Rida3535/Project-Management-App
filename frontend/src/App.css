@@ -23,6 +23,10 @@ body {
   justify-content: center;
 }
 
+.error{
+  color: red;
+}
+
 /* Responsive: Adjust container width for smaller screens */
 @media (max-width: 768px) {
   .App {
