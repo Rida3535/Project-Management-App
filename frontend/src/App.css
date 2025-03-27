@@ -31,9 +31,8 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0 auto; /* Center horizontally */
+    align-items: center;  
+    margin: auto; /* Center horizontally */
   }
 }
 
@@ -128,8 +127,7 @@ h2 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0 auto; /* Center horizontally */
+    margin: auto; 
   }
 }
 
