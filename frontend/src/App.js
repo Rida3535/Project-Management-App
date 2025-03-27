@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 
-const API_URL = "https://project-management-app-production-ef9d.up.railway.app";
+const API_URL = process.env.REACT_APP_API_URL || "https://project-management-app-production-ef9d.up.railway.app";
 
 function App() {
     const [projects, setProjects] = useState([]);
@@ -12,7 +12,7 @@ function App() {
     // Fetch projects from backend
     const fetchProjects = async () => {
         try {
-            const response = await fetch(`${API_URL}/projects`);
+            const response = await fetch(`${API_URL}/api/projects`);
             const data = await response.json();
             setProjects(data.projects);
         } catch (error) {
@@ -32,7 +32,7 @@ function App() {
         }
 
         try {
-            const response = await fetch(`${API_URL}/projects`, {
+            const response = await fetch(`${API_URL}/api/projects`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: newProject.trim() }),
@@ -56,7 +56,7 @@ function App() {
 
     const deleteProject = async (id) => {
         try {
-            const response = await fetch(`${API_URL}/projects/${id}`, {
+            const response = await fetch(`${API_URL}/api/projects/${id}`, {
                 method: "DELETE",
             });
 
