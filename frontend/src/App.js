@@ -7,19 +7,23 @@ function App() {
     const [projects, setProjects] = useState([]);
     const [newProject, setNewProject] = useState("");
     const [error, setError] = useState("");
-    const [refreshMessage, setRefreshMessage] = useState(false); // Added missing state
+    const [refreshMessage, setRefreshMessage] = useState(false);
 
-    // Fetch projects from backend
+    // Fetch projects from backend and localStorage
     const fetchProjects = async () => {
         try {
+            const storedProjects = localStorage.getItem("projects");
+            if (storedProjects) {
+                setProjects(JSON.parse(storedProjects));
+            }
             const response = await fetch(`${API_URL}/api/projects`);
             const data = await response.json();
             setProjects(data.projects);
+            localStorage.setItem("projects", JSON.stringify(data.projects));
         } catch (error) {
             console.error("Error fetching projects:", error);
         }
     };
-    
 
     useEffect(() => {
         fetchProjects();
@@ -39,12 +43,12 @@ function App() {
             });
 
             const data = await response.json();
-            console.log("Server Response:", data);  // ✅ Debugging log
-
-            if (response.ok) {  // ✅ Check if request was successful
-                setNewProject("");
-                setError("");
-                fetchProjects();  // Fetch updated projects
+            if (response.ok) {
+                const updatedProjects = [...projects, data.project];
+                setProjects(updatedProjects);
+                localStorage.setItem("projects", JSON.stringify(updatedProjects));
+                setNewProject("");  
+                setError("");  
             } else {
                 setError(data.message || "Failed to add project");
             }
@@ -62,7 +66,9 @@ function App() {
 
             const data = await response.json();
             if (data.status === "success") {
-                setProjects(projects.filter((proj) => proj.id !== id));
+                const updatedProjects = projects.filter((proj) => proj.id !== id);
+                setProjects(updatedProjects);
+                localStorage.setItem("projects", JSON.stringify(updatedProjects));
             }
         } catch (error) {
             console.error("Failed to delete project:", error);
@@ -72,12 +78,8 @@ function App() {
     const refreshProjects = async () => {
         await fetchProjects();
         setError(""); setNewProject("");
-        setRefreshMessage(true); // Show refresh message
-
-        // Hide the message after 3 seconds
-        setTimeout(() => {
-            setRefreshMessage(false);
-        }, 3000);
+        setRefreshMessage(true);
+        setTimeout(() => setRefreshMessage(false), 3000);
     };
 
     const handleKeyPress = (e) => {
@@ -95,26 +97,24 @@ function App() {
 
                 <h2>Total Projects: <span className="count">{projects.length}</span></h2>
 
-                {/* Input text box */}
                 <div className="input-container">
                     <input
                         type="text"
                         placeholder="Enter project name..."
                         value={newProject}
                         onChange={(e) => setNewProject(e.target.value)}
-                        onKeyDown={handleKeyPress} // Pressing Enter adds project
+                        onKeyDown={handleKeyPress}
                         className="project-input"
                     />
                 </div>
 
-                {/* Buttons (Add Project & Refresh Projects) */}
                 <div className="button-container">
                     <button onClick={addProject} className="add-btn">Add Project</button>
                     <button onClick={refreshProjects} className="refresh-btn">Refresh Projects</button>
                 </div>
 
                 {error && <p className="error">{error}</p>}
-                {refreshMessage && <p className="refresh-message">Projects list refreshed</p>} {/* Added success message */}
+                {refreshMessage && <p className="refresh-message">Projects list refreshed</p>}
 
                 <div className="project-list">
                     {projects.length === 0 ? (
