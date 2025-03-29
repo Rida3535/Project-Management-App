@@ -9,21 +9,26 @@ function App() {
     const [error, setError] = useState("");
     const [refreshMessage, setRefreshMessage] = useState(false);
 
-    // Fetch projects from backend & update local storage
+    // ✅ Load projects from localStorage
+    useEffect(() => {
+        const storedProjects = localStorage.getItem("projects");
+        if (storedProjects) {
+            setProjects(JSON.parse(storedProjects));
+        }
+        fetchProjects();
+    }, []);
+
+    // ✅ Fetch projects from backend and save to localStorage
     const fetchProjects = async () => {
         try {
             const response = await fetch(`${API_URL}/api/projects`);
             const data = await response.json();
             setProjects(data.projects);
-            localStorage.setItem("projects", JSON.stringify(data.projects)); // ✅ Sync Local Storage
+            localStorage.setItem("projects", JSON.stringify(data.projects)); // ✅ Save to localStorage
         } catch (error) {
             console.error("Error fetching projects:", error);
         }
     };
-
-    useEffect(() => {
-        fetchProjects();
-    }, []);
 
     const addProject = async () => {
         if (newProject.trim().length < 3) {
@@ -38,12 +43,15 @@ function App() {
                 body: JSON.stringify({ name: newProject.trim() }),
             });
 
+            const data = await response.json();
+
             if (response.ok) {
-                fetchProjects(); // ✅ Immediately fetch updated list
+                const updatedProjects = [...projects, data.project];
+                setProjects(updatedProjects);
+                localStorage.setItem("projects", JSON.stringify(updatedProjects)); // ✅ Save new project to localStorage
                 setNewProject("");
                 setError("");
             } else {
-                const data = await response.json();
                 setError(data.message || "Failed to add project");
             }
         } catch (error) {
@@ -58,8 +66,11 @@ function App() {
                 method: "DELETE",
             });
 
-            if (response.ok) {
-                fetchProjects(); // ✅ Refresh projects after deletion
+            const data = await response.json();
+            if (data.status === "success") {
+                const updatedProjects = projects.filter((proj) => proj.id !== id);
+                setProjects(updatedProjects);
+                localStorage.setItem("projects", JSON.stringify(updatedProjects)); // ✅ Update localStorage
             }
         } catch (error) {
             console.error("Failed to delete project:", error);
@@ -67,11 +78,13 @@ function App() {
     };
 
     const refreshProjects = async () => {
-        await fetchProjects(); // ✅ Ensure fresh data from backend
+        await fetchProjects();
         setError("");
         setNewProject("");
         setRefreshMessage(true);
-        setTimeout(() => setRefreshMessage(false), 3000);
+        setTimeout(() => {
+            setRefreshMessage(false);
+        }, 3000);
     };
 
     const handleKeyPress = (e) => {
@@ -83,27 +96,32 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <h1><span className="icon">⚙️</span> Project Manager</h1>
+                <h1>
+                    <span className="icon">⚙️</span> Project Manager
+                </h1>
+
                 <h2>Total Projects: <span className="count">{projects.length}</span></h2>
 
+                {/* Input text box */}
                 <div className="input-container">
                     <input
                         type="text"
                         placeholder="Enter project name..."
                         value={newProject}
                         onChange={(e) => setNewProject(e.target.value)}
-                        onKeyDown={handleKeyPress}
+                        onKeyDown={handleKeyPress} // Pressing Enter adds project
                         className="project-input"
                     />
                 </div>
 
+                {/* Buttons (Add Project & Refresh Projects) */}
                 <div className="button-container">
                     <button onClick={addProject} className="add-btn">Add Project</button>
                     <button onClick={refreshProjects} className="refresh-btn">Refresh Projects</button>
                 </div>
 
                 {error && <p className="error">{error}</p>}
-                {refreshMessage && <p className="refresh-message">Projects list refreshed</p>}
+                {refreshMessage && <p className="refresh-message">Projects list refreshed</p>} {/* Added success message */}
 
                 <div className="project-list">
                     {projects.length === 0 ? (
