@@ -9,7 +9,7 @@ function App() {
     const [error, setError] = useState("");
     const [refreshMessage, setRefreshMessage] = useState(false);
 
-    // ✅ Load projects from localStorage (initially)
+    // ✅ Load projects from localStorage (No Backend)
     useEffect(() => {
         const storedProjects = localStorage.getItem("projects");
         if (storedProjects) {
@@ -17,81 +17,43 @@ function App() {
         }
     }, []);
 
-    // ✅ Save to Local Storage
+    // ✅ Save projects to localStorage
     const updateLocalStorage = (updatedProjects) => {
         localStorage.setItem("projects", JSON.stringify(updatedProjects));
         setProjects(updatedProjects);
     };
 
-    // ✅ Fetch projects from backend and store in localStorage (only when refreshed)
-    const fetchProjects = async () => {
-        try {
-            const response = await fetch(`${API_URL}/api/projects`);
-            const data = await response.json();
-
-            updateLocalStorage(data.projects); // ✅ Sync with local storage
-        } catch (error) {
-            console.error("Error fetching projects:", error);
-        }
-    };
-
-    // ✅ Add project (updates both local storage & backend)
-    const addProject = async () => {
+    // ✅ Add project (No Backend, Only Local Storage)
+    const addProject = () => {
         if (newProject.trim().length < 3) {
             setError("Project name must be at least 3 characters");
             return;
         }
 
-        try {
-            const response = await fetch(`${API_URL}/api/projects`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: newProject.trim() }),
-            });
+        const newProj = { id: Date.now(), name: newProject.trim() }; // Unique ID using timestamp
+        const updatedProjects = [...projects, newProj];
 
-            const data = await response.json();
-
-            if (response.ok) {
-                const updatedProjects = [...projects, data.project];
-                updateLocalStorage(updatedProjects); // ✅ Update local storage
-                setNewProject("");
-                setError("");
-            } else {
-                setError(data.message || "Failed to add project");
-            }
-        } catch (error) {
-            console.error("Failed to add project:", error);
-            setError("Could not connect to the server");
-        }
+        updateLocalStorage(updatedProjects); // ✅ Local Storage Update
+        setNewProject("");
+        setError("");
     };
 
-    // ✅ Delete project (updates both local storage & backend)
-    const deleteProject = async (id) => {
-        try {
-            const response = await fetch(`${API_URL}/api/projects/${id}`, {
-                method: "DELETE",
-            });
-
-            const data = await response.json();
-            if (data.status === "success") {
-                const updatedProjects = projects.filter((proj) => proj.id !== id);
-                updateLocalStorage(updatedProjects); // ✅ Update local storage
-            }
-        } catch (error) {
-            console.error("Failed to delete project:", error);
-        }
+    // ✅ Delete project (No Backend, Only Local Storage)
+    const deleteProject = (id) => {
+        const updatedProjects = projects.filter((proj) => proj.id !== id);
+        updateLocalStorage(updatedProjects); // ✅ Local Storage Update
     };
 
-    // ✅ Refresh projects (sync with backend)
-    const refreshProjects = async () => {
-        await fetchProjects();
+    // ✅ Refresh Projects (No Backend, Only Reset from Local Storage)
+    const refreshProjects = () => {
+        const storedProjects = localStorage.getItem("projects");
+        if (storedProjects) {
+            setProjects(JSON.parse(storedProjects));
+        }
         setError("");
         setNewProject("");
         setRefreshMessage(true);
-
-        setTimeout(() => {
-            setRefreshMessage(false);
-        }, 3000);
+        setTimeout(() => setRefreshMessage(false), 3000);
     };
 
     const handleKeyPress = (e) => {
