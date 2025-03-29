@@ -9,17 +9,13 @@ function App() {
     const [error, setError] = useState("");
     const [refreshMessage, setRefreshMessage] = useState(false);
 
-    // Fetch projects from backend and localStorage
+    // Fetch projects from backend & update local storage
     const fetchProjects = async () => {
         try {
-            const storedProjects = localStorage.getItem("projects");
-            if (storedProjects) {
-                setProjects(JSON.parse(storedProjects));
-            }
             const response = await fetch(`${API_URL}/api/projects`);
             const data = await response.json();
             setProjects(data.projects);
-            localStorage.setItem("projects", JSON.stringify(data.projects));
+            localStorage.setItem("projects", JSON.stringify(data.projects)); // ✅ Sync Local Storage
         } catch (error) {
             console.error("Error fetching projects:", error);
         }
@@ -42,14 +38,12 @@ function App() {
                 body: JSON.stringify({ name: newProject.trim() }),
             });
 
-            const data = await response.json();
             if (response.ok) {
-                const updatedProjects = [...projects, data.project];
-                setProjects(updatedProjects);
-                localStorage.setItem("projects", JSON.stringify(updatedProjects));
-                setNewProject("");  
-                setError("");  
+                fetchProjects(); // ✅ Immediately fetch updated list
+                setNewProject("");
+                setError("");
             } else {
+                const data = await response.json();
                 setError(data.message || "Failed to add project");
             }
         } catch (error) {
@@ -64,11 +58,8 @@ function App() {
                 method: "DELETE",
             });
 
-            const data = await response.json();
-            if (data.status === "success") {
-                const updatedProjects = projects.filter((proj) => proj.id !== id);
-                setProjects(updatedProjects);
-                localStorage.setItem("projects", JSON.stringify(updatedProjects));
+            if (response.ok) {
+                fetchProjects(); // ✅ Refresh projects after deletion
             }
         } catch (error) {
             console.error("Failed to delete project:", error);
@@ -76,8 +67,9 @@ function App() {
     };
 
     const refreshProjects = async () => {
-        await fetchProjects();
-        setError(""); setNewProject("");
+        await fetchProjects(); // ✅ Ensure fresh data from backend
+        setError("");
+        setNewProject("");
         setRefreshMessage(true);
         setTimeout(() => setRefreshMessage(false), 3000);
     };
@@ -91,10 +83,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <h1>
-                    <span className="icon">⚙️</span> Project Manager
-                </h1>
-
+                <h1><span className="icon">⚙️</span> Project Manager</h1>
                 <h2>Total Projects: <span className="count">{projects.length}</span></h2>
 
                 <div className="input-container">
